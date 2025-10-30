@@ -41,6 +41,28 @@ function AppRouter() {
     <>
       {url === "/" && (
         <ViewTransition key={url} default="none" enter="auto" exit="auto">
+          <div>
+            <button
+              style={{ all: "revert", fontSize: 18 }}
+              onClick={async () => {
+                let shouldStopIteration = false;
+                window.onerror = (e) => {
+                  shouldStopIteration = true;
+                };
+                for (let i = 0; i < 200; i++) {
+                  if (shouldStopIteration) break;
+                  const elts = document.querySelectorAll(
+                    '[data-slot="item-actions"] button'
+                  );
+                  const ind = Math.floor(Math.random() * elts.length);
+                  elts[ind].click();
+                  await new Promise((r) => setTimeout(r, 500));
+                }
+              }}
+            >
+              Start Clicks
+            </button>
+          </div>
           <Layout heading={<div>Course Lessons</div>}>
             <Home />
           </Layout>
@@ -69,5 +91,7 @@ export default function App() {
   );
 }
 
-const root = createRoot(document.getElementById("root"), {});
+const root = createRoot(document.getElementById("root"), {
+  // onDefaultTransitionIndicator: () => {},
+});
 root.render(<App />);
